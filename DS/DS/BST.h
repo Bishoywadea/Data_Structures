@@ -16,15 +16,34 @@ private:
 	int CountNodes( BTNode<T>* Root);
 	int NodesSum(BTNode<T>* root);
 	int LeavesSum(BTNode<T>* root);
+	void PrintLessThan(BTNode<T>* root, int V);
 public:
 	BST();
 	void add(T d);
 	BTNode<T>* newNode(T d);
 	void BFSTransverse();
 	void DFS();
+	/*
+	* member function that counts the number of nodes in a binary tree.
+	*/
 	int NumOfNodes();
+	/*
+	* member function that returns the sum of all the nodes in a binary tree.
+	*/
 	int SumOfNodes();
+	/*
+	* member function that counts the sum of leaves in a binary tree.
+	*/
 	int SumOfLeaves();
+	/*
+	* member function that returns the maximum value of all the nodes in a binary tree.
+	* Assume all values are non-negative; return -1 if the tree is empty.
+	*/
+	int Getmax();
+	/*
+	* member function that prints all the keys that are less than a given value, V, in a binary tree.
+	*/
+	void PrintLessThan(int V);
 	~BST();
 };
 
@@ -134,6 +153,22 @@ inline int BST<T>::LeavesSum(BTNode<T>* root)
 		return LeavesSum(root->getRight());
 }
 
+template<typename T>
+inline void BST<T>::PrintLessThan(BTNode<T>* root ,int V)
+{
+	if(root->getData()<V)
+		cout << root->getData() << " ";
+	if (!root->getLeft() && !root->getRight() && root->getData() < V);
+	else if (root->getLeft() && root->getRight()) {
+		PrintLessThan(root->getLeft(),V);
+		PrintLessThan(root->getRight(),V);
+	}
+	else if (root->getLeft())
+		PrintLessThan(root->getLeft(), V);
+	else if (root->getRight())
+		PrintLessThan(root->getRight(), V);
+}
+
 /************************
 **  public functions
 ************************/
@@ -191,6 +226,26 @@ template<typename T>
 inline int BST<T>::SumOfLeaves()
 {
 	return LeavesSum(Root);
+}
+
+template<typename T>
+inline int BST<T>::Getmax()
+{
+	if (!Root)
+		return -1;
+	BTNode<T>* cur = Root;
+	while (cur->getRight())
+		cur = cur->getRight();
+	return cur->getData();
+}
+
+
+
+template<typename T>
+inline void BST<T>::PrintLessThan(int V)
+{
+	PrintLessThan(Root, V);
+	cout << endl;
 }
 
 template<typename T>
