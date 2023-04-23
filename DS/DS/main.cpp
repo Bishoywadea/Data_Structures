@@ -17,8 +17,7 @@ int main()
 	tree.add(35);
 	tree.add(25);
 	tree.add(60);
-	tree.BFSTransverse();
-	cout << endl;
-	tree.DFS();
+	tree.add(60);
+	cout<<tree.SumOfNodes();
 }
 

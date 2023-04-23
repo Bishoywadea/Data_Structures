@@ -13,6 +13,8 @@ private:
 	void addLeft(BTNode<T>* p, T d);
 	void findPlace(BTNode<T>* cur,T d);
 	BTNode<T>* PrintDfs(BTNode<T>* R);
+	int CountNodes( BTNode<T>* Root);
+	int NodesSum(BTNode<T>* root);
 	
 public:
 	BST();
@@ -20,6 +22,8 @@ public:
 	BTNode<T>* newNode(T d);
 	void BFSTransverse();
 	void DFS();
+	int NumOfNodes();
+	int SumOfNodes();
 	~BST();
 };
 
@@ -90,6 +94,32 @@ inline BTNode<T>* BST<T>::PrintDfs(BTNode<T>* R)
 	return nullptr;
 }
 
+template<typename T>
+inline int BST<T>::CountNodes( BTNode<T>* root)
+{
+	if (!root->getLeft() && !root->getRight())
+		return 1;
+	else if(root->getLeft() && root->getRight())
+		return 1 + CountNodes(root->getLeft()) + CountNodes(root->getRight());
+	else if (root->getLeft())
+		return 1 + CountNodes(root->getLeft());
+	else if (root->getLeft())
+		return 1 + CountNodes(root->getRight());
+}
+
+template<typename T>
+inline int BST<T>::NodesSum(BTNode<T>* root)
+{
+	if (!root->getLeft() && !root->getRight())
+		return root->getData();
+	else if (root->getLeft() && root->getRight())
+		return root->getData() + NodesSum(root->getLeft()) + NodesSum(root->getRight());
+	else if (root->getLeft())
+		return root->getData() + NodesSum(root->getLeft());
+	else if (root->getLeft())
+		return root->getData() + NodesSum(root->getRight());
+}
+
 /************************
 **  public functions
 ************************/
@@ -129,6 +159,18 @@ template<typename T>
 void BST<T>::DFS()
 {
 	PrintDfs(Root);
+}
+
+template<typename T>
+inline int BST<T>::NumOfNodes()
+{
+	return CountNodes(Root);
+}
+
+template<typename T>
+inline int BST<T>::SumOfNodes()
+{
+	return NodesSum(Root);
 }
 
 template<typename T>
