@@ -1,4 +1,4 @@
-📚 Data Structures Repo 📚
+# 📚 Data Structures Repo 📚
 Welcome to my Data Structures Repo! This repository is a collection of data structure implementations that I have created to improve my understanding of algorithms and data structures.
 
 📂 Folder Structure
