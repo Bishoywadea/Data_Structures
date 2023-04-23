@@ -1,7 +1,7 @@
 # 📚 Data Structures Repo 📚
 Welcome to my Data Structures Repo! This repository is a collection of data structure implementations that I have created to improve my understanding of algorithms and data structures.
 
-📂 Folder Structure
+##📂 Folder Structure
 arrays : Implementation of various operations on arrays.
 linked-lists : Implementation of singly linked lists, doubly linked lists, and circular linked lists.
 stacks : Implementation of stack data structure and various operations on stack.
