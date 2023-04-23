@@ -1,4 +1,4 @@
 ﻿  main.cpp
 E:\CUFE\CMP01 2026\second term\Data Structure & Algorithms\DS classes\Data_Structures\DS\DS\BST.h(2,9): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-E:\CUFE\CMP01 2026\second term\Data Structure & Algorithms\DS classes\Data_Structures\DS\DS\BST.h(121): warning C4715: 'BST<int>::NodesSum': not all control paths return a value
+E:\CUFE\CMP01 2026\second term\Data Structure & Algorithms\DS classes\Data_Structures\DS\DS\BST.h(135): warning C4715: 'BST<int>::LeavesSum': not all control paths return a value
   DS.vcxproj -> E:\CUFE\CMP01 2026\second term\Data Structure & Algorithms\DS classes\Data_Structures\DS\x64\Debug\DS.exe

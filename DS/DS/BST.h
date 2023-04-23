@@ -15,7 +15,7 @@ private:
 	BTNode<T>* PrintDfs(BTNode<T>* R);
 	int CountNodes( BTNode<T>* Root);
 	int NodesSum(BTNode<T>* root);
-	
+	int LeavesSum(BTNode<T>* root);
 public:
 	BST();
 	void add(T d);
@@ -24,6 +24,7 @@ public:
 	void DFS();
 	int NumOfNodes();
 	int SumOfNodes();
+	int SumOfLeaves();
 	~BST();
 };
 
@@ -103,7 +104,7 @@ inline int BST<T>::CountNodes( BTNode<T>* root)
 		return 1 + CountNodes(root->getLeft()) + CountNodes(root->getRight());
 	else if (root->getLeft())
 		return 1 + CountNodes(root->getLeft());
-	else if (root->getLeft())
+	else if (root->getRight())
 		return 1 + CountNodes(root->getRight());
 }
 
@@ -116,8 +117,21 @@ inline int BST<T>::NodesSum(BTNode<T>* root)
 		return root->getData() + NodesSum(root->getLeft()) + NodesSum(root->getRight());
 	else if (root->getLeft())
 		return root->getData() + NodesSum(root->getLeft());
-	else if (root->getLeft())
+	else if (root->getRight())
 		return root->getData() + NodesSum(root->getRight());
+}
+
+template<typename T>
+inline int BST<T>::LeavesSum(BTNode<T>* root)
+{
+	if (!root->getLeft() && !root->getRight())
+		return root->getData();
+	else if (root->getLeft() && root->getRight())
+		return LeavesSum(root->getLeft()) + LeavesSum(root->getRight());
+	else if (root->getLeft())
+		return LeavesSum(root->getLeft());
+	else if (root->getRight())
+		return LeavesSum(root->getRight());
 }
 
 /************************
@@ -171,6 +185,12 @@ template<typename T>
 inline int BST<T>::SumOfNodes()
 {
 	return NodesSum(Root);
+}
+
+template<typename T>
+inline int BST<T>::SumOfLeaves()
+{
+	return LeavesSum(Root);
 }
 
 template<typename T>
