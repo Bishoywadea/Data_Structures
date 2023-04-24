@@ -18,6 +18,7 @@ private:
 	int LeavesSum(BTNode<T>* root);
 	void PrintLessThan(BTNode<T>* root, int V);
 	void inverseChildren(BTNode<T>* root, BTNode<T>* original);
+	bool SummationOfPath(int target, int s, BTNode<T>* p);
 public:
 	BST();
 	void add(T d);
@@ -54,6 +55,10 @@ public:
 	* member function to delete all the leaves from a binary tree, leaving the root and intermediate nodes in place.
 	*/
 	void DeleteLeaves();
+	/*
+	* member function has_path_sum that returns true if the tree contains any path from the root to one of the leaves with the given sum.
+	*/
+	bool PathFinder(int target);
 	~BST();
 };
 
@@ -214,6 +219,25 @@ inline void BST<T>::inverseChildren(BTNode<T>* root , BTNode<T>* original)
 	return;
 }
 
+template<typename T>
+inline bool BST<T>::SummationOfPath(int target, int s, BTNode<T>* p)
+{
+	if (p)
+	{
+		if (SummationOfPath(target, s+p->getData(), p->getLeft()))
+			return 1;
+		if (SummationOfPath(target, s+p->getData(), p->getRight()))
+			return 1;
+	}
+	else
+	{
+		if (target == s)
+			return 1;
+		else
+			return 0;
+	}
+}
+
 /************************
 **  public functions
 ************************/
@@ -329,6 +353,12 @@ inline void BST<T>::DeleteLeaves()
 		}
 		q.dequeue();
 	}
+}
+
+template<typename T>
+inline bool BST<T>::PathFinder(int target)
+{
+	return SummationOfPath(target, 0, Root);
 }
 
 template<typename T>
