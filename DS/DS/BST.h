@@ -17,6 +17,7 @@ private:
 	int NodesSum(BTNode<T>* root);
 	int LeavesSum(BTNode<T>* root);
 	void PrintLessThan(BTNode<T>* root, int V);
+	void inverseChildren(BTNode<T>* root, BTNode<T>* original);
 public:
 	BST();
 	void add(T d);
@@ -44,6 +45,11 @@ public:
 	* member function that prints all the keys that are less than a given value, V, in a binary tree.
 	*/
 	void PrintLessThan(int V);
+	/*
+	* member function that creates a mirror image of a binary tree. All left children become right children and vice versa.
+	* The input tree must remain the same.
+	*/
+	void createMirrorTree(BST*& mirrored);
 	~BST();
 };
 
@@ -169,6 +175,41 @@ inline void BST<T>::PrintLessThan(BTNode<T>* root ,int V)
 		PrintLessThan(root->getRight(), V);
 }
 
+template<typename T>
+inline void BST<T>::inverseChildren(BTNode<T>* root , BTNode<T>* original)
+{
+	if (original)
+	{
+		root->setData(original->getData());
+		if (original->getLeft() && original->getRight())
+		{
+			BTNode<T>* left=new BTNode<T>;
+			BTNode<T>* right = new BTNode<T>;
+			left->setData(original->getLeft()->getData());
+			right->setData(original->getRight()->getData());
+			root->setLeft(right);
+			root->setRight(left);
+			inverseChildren(root->getLeft(), original->getRight());
+			inverseChildren(root->getRight(), original->getLeft());
+		}
+		else if (original->getLeft() && !original->getRight())
+		{
+			BTNode<T>* temp = new BTNode<T>;
+			temp->setData(original->getLeft()->getData());
+			root->setRight(temp);
+			inverseChildren(root->getRight(), original->getLeft());
+		}
+		else if (!original->getLeft() && original->getRight())
+		{
+			BTNode<T>* temp = new BTNode<T>;
+			temp->setData(original->getRight()->getData());
+			root->setLeft(temp);
+			inverseChildren(root->getLeft(), original->getRight());
+		}
+	}
+	return;
+}
+
 /************************
 **  public functions
 ************************/
@@ -239,13 +280,21 @@ inline int BST<T>::Getmax()
 	return cur->getData();
 }
 
-
-
 template<typename T>
 inline void BST<T>::PrintLessThan(int V)
 {
 	PrintLessThan(Root, V);
 	cout << endl;
+}
+
+template<typename T>
+inline void BST<T>::createMirrorTree(BST*& mirrored)
+{
+	if (Root) {
+		mirrored = new BST<int>;
+		mirrored->add(Root->getData());
+		inverseChildren(mirrored->Root, this->Root);
+	}
 }
 
 template<typename T>
