@@ -50,6 +50,10 @@ public:
 	* The input tree must remain the same.
 	*/
 	void createMirrorTree(BST*& mirrored);
+	/*
+	* member function to delete all the leaves from a binary tree, leaving the root and intermediate nodes in place.
+	*/
+	void DeleteLeaves();
 	~BST();
 };
 
@@ -294,6 +298,36 @@ inline void BST<T>::createMirrorTree(BST*& mirrored)
 		mirrored = new BST<int>;
 		mirrored->add(Root->getData());
 		inverseChildren(mirrored->Root, this->Root);
+	}
+}
+
+template<typename T>
+inline void BST<T>::DeleteLeaves()
+{
+	LinkedQueue<BTNode<T>*> q;
+	q.enqueue(Root);
+	while (!q.isEmpty())
+	{
+		BTNode<T>* leave = nullptr;
+		if (q.peekFront()->getLeft()) {
+			if(q.peekFront()->getLeft()->getLeft() || q.peekFront()->getLeft()->getRight())
+				q.enqueue(q.peekFront()->getLeft());
+			else
+			{
+				delete q.peekFront()->getLeft();
+				q.peekFront()->setLeft(nullptr);
+			}
+		}
+		if (q.peekFront()->getRight()){
+			if (q.peekFront()->getRight()->getLeft() || q.peekFront()->getRight()->getRight())
+				q.enqueue(q.peekFront()->getRight());
+			else
+			{
+				delete q.peekFront()->getRight();
+				q.peekFront()->setRight(nullptr);
+			}
+		}
+		q.dequeue();
 	}
 }
 
