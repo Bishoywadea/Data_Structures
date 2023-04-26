@@ -20,6 +20,7 @@ private:
 	void inverseChildren(BTNode<T>* root, BTNode<T>* original);
 	bool SummationOfPath(int target, int s, BTNode<T>* p);
 	void PrintAllWaysFromRootToLeaf(BTNode<T>* root,int arr[],int index);
+	bool DeleteOneChildNode(BTNode<T>* node, BTNode<T>* parent);
 public:
 	BST();
 	void add(T d);
@@ -57,6 +58,10 @@ public:
 	*/
 	void DeleteLeaves();
 	/*
+	* member function that deletes all leaf nodes that has even values.
+	*/
+	void DeleteEvenLeaves();
+	/*
 	* member function has_path_sum that returns true if the tree contains any path from the root to one of the leaves with the given sum.
 	*/
 	bool PathFinder(int target);
@@ -64,6 +69,11 @@ public:
 	* Given a binary tree, write a member function that prints out all of its root-to-leaf paths, one per line.
 	*/
 	void PrintAllRoutes();
+	/*
+	* member function that makes a pre-order traversal in the tree and deletes the first met node that has exactly one child (not 0 or 2)
+	* and makes its child subtree in the place of it in the tree
+	*/
+	void RemoveNodeWithOneChild();
 	~BST();
 };
 
@@ -174,18 +184,13 @@ inline int BST<T>::LeavesSum(BTNode<T>* root)
 }
 
 template<typename T>
-inline void BST<T>::PrintLessThan(BTNode<T>* root ,int V)
+inline void BST<T>::PrintLessThan(BTNode<T>* root,int V)
 {
-	if(root->getData()<V)
-		cout << root->getData() << " ";
-	if (!root->getLeft() && !root->getRight() && root->getData() < V);
-	else if (root->getLeft() && root->getRight()) {
-		PrintLessThan(root->getLeft(),V);
-		PrintLessThan(root->getRight(),V);
-	}
-	else if (root->getLeft())
+	if (root->getLeft())
 		PrintLessThan(root->getLeft(), V);
-	else if (root->getRight())
+	if (root->getData() < V)
+		cout << root->getData() << " ";
+	if (root->getRight())
 		PrintLessThan(root->getRight(), V);
 }
 
@@ -256,11 +261,34 @@ inline void BST<T>::PrintAllWaysFromRootToLeaf(BTNode<T>* root, int arr[], int i
 	}
 	if (!root->getLeft() && !root->getRight()) {
 		for (int i = 0; i < index; i++)
-		{
 			cout << arr[i] << "->";
-		}
 		cout << root->getData()<<endl;
 	}
+}
+
+template<typename T>
+inline bool BST<T>::DeleteOneChildNode(BTNode<T>* node , BTNode<T>* parent)
+{
+	if ((node->getLeft() || node->getRight()) && !(node->getLeft() && node->getRight()))
+	{
+		BTNode<T>* temp;
+		if(node->getLeft())
+			temp= node->getLeft();
+		else
+			temp = node->getRight();
+		if (!parent)
+			Root = temp;
+		else if (parent->getLeft() == node)
+			parent->setLeft(temp);
+		else
+			parent->setRight(temp);
+		delete node;
+		return 1;
+	}
+	if(node->getLeft())
+		DeleteOneChildNode(node->getLeft(), node);
+	if(node->getRight())
+		DeleteOneChildNode(node->getRight(), node);
 }
 
 /************************
@@ -381,6 +409,40 @@ inline void BST<T>::DeleteLeaves()
 }
 
 template<typename T>
+inline void BST<T>::DeleteEvenLeaves()
+{
+	LinkedQueue<BTNode<T>*> q;
+	q.enqueue(Root);
+	while (!q.isEmpty())
+	{
+		BTNode<T>* leave = nullptr;
+		if (q.peekFront()->getLeft()) {
+			if (q.peekFront()->getLeft()->getLeft() || q.peekFront()->getLeft()->getRight())
+				q.enqueue(q.peekFront()->getLeft());
+			else
+			{
+				if (q.peekFront()->getLeft()->getData() % 2 == 0) {
+					delete q.peekFront()->getLeft();
+					q.peekFront()->setLeft(nullptr);
+				}
+			}
+		}
+		if (q.peekFront()->getRight()) {
+			if (q.peekFront()->getRight()->getLeft() || q.peekFront()->getRight()->getRight())
+				q.enqueue(q.peekFront()->getRight());
+			else
+			{
+				if (q.peekFront()->getRight()->getData() % 2 == 0) {
+					delete q.peekFront()->getRight();
+					q.peekFront()->setRight(nullptr);
+				}
+			}
+		}
+		q.dequeue();
+	}
+}
+
+template<typename T>
 inline bool BST<T>::PathFinder(int target)
 {
 	return SummationOfPath(target, 0, Root);
@@ -391,6 +453,12 @@ inline void BST<T>::PrintAllRoutes()
 {
 	int arr[1000] = { 0 };
 	PrintAllWaysFromRootToLeaf(Root, arr, 0);
+}
+
+template<typename T>
+inline void BST<T>::RemoveNodeWithOneChild()
+{
+	DeleteOneChildNode(Root, nullptr);
 }
 
 template<typename T>
