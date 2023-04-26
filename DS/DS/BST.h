@@ -19,6 +19,7 @@ private:
 	void PrintLessThan(BTNode<T>* root, int V);
 	void inverseChildren(BTNode<T>* root, BTNode<T>* original);
 	bool SummationOfPath(int target, int s, BTNode<T>* p);
+	void PrintAllWaysFromRootToLeaf(BTNode<T>* root,int arr[],int index);
 public:
 	BST();
 	void add(T d);
@@ -59,6 +60,10 @@ public:
 	* member function has_path_sum that returns true if the tree contains any path from the root to one of the leaves with the given sum.
 	*/
 	bool PathFinder(int target);
+	/*
+	* Given a binary tree, write a member function that prints out all of its root-to-leaf paths, one per line.
+	*/
+	void PrintAllRoutes();
 	~BST();
 };
 
@@ -238,6 +243,26 @@ inline bool BST<T>::SummationOfPath(int target, int s, BTNode<T>* p)
 	}
 }
 
+template<typename T>
+inline void BST<T>::PrintAllWaysFromRootToLeaf(BTNode<T>* root, int arr[], int index)
+{
+	if (root->getRight()) {
+		arr[index] = root->getData();
+		PrintAllWaysFromRootToLeaf(root->getRight(), arr, index+1);
+	}
+	if (root->getLeft()) {
+		arr[index] = root->getData();
+		PrintAllWaysFromRootToLeaf(root->getLeft(), arr, index + 1);
+	}
+	if (!root->getLeft() && !root->getRight()) {
+		for (int i = 0; i < index; i++)
+		{
+			cout << arr[i] << "->";
+		}
+		cout << root->getData()<<endl;
+	}
+}
+
 /************************
 **  public functions
 ************************/
@@ -359,6 +384,13 @@ template<typename T>
 inline bool BST<T>::PathFinder(int target)
 {
 	return SummationOfPath(target, 0, Root);
+}
+
+template<typename T>
+inline void BST<T>::PrintAllRoutes()
+{
+	int arr[1000] = { 0 };
+	PrintAllWaysFromRootToLeaf(Root, arr, 0);
 }
 
 template<typename T>
