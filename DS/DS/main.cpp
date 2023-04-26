@@ -16,8 +16,10 @@ int main()
 	tree.add(30);
 	tree.add(35);
 	tree.add(25);
+	tree.add(12);
 	tree.add(60);
 	tree.add(100);
-	tree.PrintAllRoutes();
+
+	tree.PrintLessThan(55);
 }
 
